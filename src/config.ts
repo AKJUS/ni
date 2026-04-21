@@ -21,6 +21,7 @@ interface Config {
   runAgent: 'node' | undefined
   useSfw: boolean
   catalog: boolean
+  noLastCommand: boolean
 }
 
 const defaultConfig: Config = {
@@ -29,6 +30,7 @@ const defaultConfig: Config = {
   runAgent: undefined,
   useSfw: false,
   catalog: true,
+  noLastCommand: false,
 }
 
 let config: Config | undefined
@@ -53,6 +55,9 @@ export async function getConfig(): Promise<Config> {
 
     if (process.env.NI_CATALOG !== undefined)
       config.catalog = process.env.NI_CATALOG !== 'false'
+
+    if (process.env.NI_NO_LAST_COMMAND !== undefined)
+      config.noLastCommand = process.env.NI_NO_LAST_COMMAND === 'true'
 
     const agent = await detect({ programmatic: true })
     if (agent)
